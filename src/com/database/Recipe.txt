@@ -1,0 +1,34 @@
+RC001
+Cheese-100|Corn-10|Pasta-200|Mushroom-50|Milk-100
+RC002
+Pasta-200|Bell Peppers-50|Tomatoes-50|Tomato Puree-100
+RC003
+Bread Bases-4|Garlic Butter-30|Cheese-100
+RC004
+Cheese-200|Pizza Bases-1|Tomato Puree-100
+RC005
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Mushroom-20|Jalapenos-20|Tomatoes-30
+RC006
+Cheese-30|Tomato Puree-30|Potatoes-100
+RC007
+Bread Bases-4|Garlic Butter-30
+RC008
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Corn-10|Jalapenos-20|Bell Peppers-20
+RC009
+Cheese-100|Pizza Bases-1|Tomato Puree-100
+RC010
+Cheese-50|Corn-10|Pasta-200|Mushroom-20|Milk-100|Bell Peppers-50|Tomatoes-50
+RC011
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Mushroom-30|Onions-10
+RC012
+Flour-50|Onions-50|Tomato Puree-30
+RC013
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Panner-40|Bell Peppers-20|Onions-20
+RC014
+Potatoes-150|Tomato Puree-30
+RC015
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Tomatoes-20|Bell Peppers-20|Onions-20
+RC016
+Mushroom-100|Cheese-50|Tomato Puree-50|Milk-50
+RC017
+Cheese-100|Pizza Bases-1|Tomato Puree-100|Corn-20|Bell Peppers-20|Onions-20
