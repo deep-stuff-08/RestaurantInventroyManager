@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import com.gui.Order;
 import com.gui.admin.AddRecipe;
 import com.gui.admin.Admin;
+import com.gui.login.Login;
 
 @SuppressWarnings("unused")
 public class Test {
@@ -17,6 +18,8 @@ public class Test {
 //		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //		f.add(new AddRecipe().getMain());
 //		f.setVisible(true);
-		Admin a=new Admin();
+//		Admin a=new Admin();
+//		new Order();
+		new Login();
 	}
 }

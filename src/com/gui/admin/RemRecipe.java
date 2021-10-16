@@ -35,8 +35,8 @@ public class RemRecipe {
 				if(a==JOptionPane.YES_OPTION) {
 					try {
 						String s=(String)recname.getSelectedItem();
-						s=s.substring(0, 5);
-						Admin.getConnect().removeRecipe(s);
+						s=s.substring(0, s.indexOf("-"));
+						Admin.getConnect().removeRecipe(Integer.parseInt(s));
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

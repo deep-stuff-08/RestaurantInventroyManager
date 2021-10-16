@@ -3,10 +3,12 @@ package com.gui.admin;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,19 +16,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
-public class AddIndgredients {
+public class OrderIndgredients {
 
 	JPanel main;
-	JLabel lindname;
+	JComboBox<String> indname;
 	JLabel lquantity;
-	JTextField indname;
 	JTextField quantity;
 	JButton submit;
-	public AddIndgredients() {
+	public OrderIndgredients() throws SQLException {
 		main=new JPanel(new FlowLayout());
-		lindname=new JLabel("Enter Indgredients Name");
+		String[] s=Admin.getConnect().getAllIndgredients();
+		indname=new JComboBox<String>(s);
 		lquantity=new JLabel("Enter Quantity");
-		indname=new JTextField(10);
 		NumberFormat numf=NumberFormat.getIntegerInstance();
 		NumberFormatter nf=new NumberFormatter(numf);
 		nf.setValueClass(Integer.class);
@@ -36,10 +37,9 @@ public class AddIndgredients {
 		nf.setAllowsInvalid(false);
 		quantity=new JFormattedTextField(nf);
 		quantity.setText("0");
-		quantity.setColumns(2);
+		quantity.setColumns(5);
 		submit=new JButton("Submit");
 		submit.addActionListener(addSubAction());
-		main.add(lindname);
 		main.add(indname);
 		main.add(lquantity);
 		main.add(quantity);
@@ -54,22 +54,15 @@ public class AddIndgredients {
 				int a=JOptionPane.showConfirmDialog(null, "Are you sure you want to add this indgredient?");
 				if(a==JOptionPane.YES_OPTION) {
 					String qua=quantity.getText().replaceAll(",", "");
-					if (indname.getText().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Error: Indgredient name cannot be empty", "Error Occurred", JOptionPane.ERROR_MESSAGE);
+					if(qua.isEmpty() || Integer.parseInt(qua) == 0) {
+						return;
 					}
-					else if (Integer.parseInt(qua)==0) {
-						JOptionPane.showMessageDialog(null, "Error: Quantity cannot be empty", "Error Occurred", JOptionPane.ERROR_MESSAGE);;
+					try {
+						Admin.getConnect().updateQuantity((String)indname.getSelectedItem(), Integer.parseInt(qua));
+					} catch (NumberFormatException | FileNotFoundException | SQLException e1) {
+						e1.printStackTrace();
 					}
-					else {
-						String ind=indname.getText();
-						try {
-							Admin.getConnect().addIndgredient(ind, qua);
-							indname.setText("");
-							quantity.setText("0");
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						}
-					}
+					quantity.setText("0");
 				}
 			}
 		};

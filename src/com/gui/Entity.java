@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,7 +30,7 @@ public class Entity extends JPanel {
 	JPanel pn;
 	JPanel ps;
 	Font f;
-	String id;
+	int id;
 	Connector con;
 	
 	
@@ -37,12 +39,18 @@ public class Entity extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if (con.isQuantityAdd(id)) {
+					ArrayList<String> unavail = con.isQuantityAdd(id);
+					if (unavail.isEmpty()) {
 						quantity.setText(Integer.toString(Integer.parseInt(quantity.getText())+1));		
 						con.updateDatabase(id, Entity.negative);
 					}
 					else {
-						JOptionPane.showMessageDialog(null, "Not enough indgredients");
+						String indList = "";
+						Iterator<String> it = unavail.iterator();
+						while(it.hasNext()) {
+							indList += it.next() + ",";
+						}
+						JOptionPane.showMessageDialog(null, "Not enough indgredients. Following Indgredients are missing:"+indList);
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -65,7 +73,7 @@ public class Entity extends JPanel {
 		});
 	}
 	
-	public Entity(String text, String id) throws Exception{
+	public Entity(String text, int id) throws Exception{
 		name=new JLabel(text);
 		add=new JButton("+");
 		sub=new JButton("-");

@@ -33,21 +33,27 @@ public class Admin {
 	UpdIndgredient updind;
 	UpdRecipeName updrecnam;
 	UpdRecipe updrec;
+	OrderIndgredients indorder;
+	ViewIndgredients indview;
+	ViewRecipe recview;
 	public Admin() throws Exception {
 		frame=new JFrame();
 		title=new JLabel("Admin Page", SwingConstants.CENTER);
 		title.setFont(new Font("Sans", Font.BOLD, 28));
-		option=new JComboBox<String>(new String[]{"Add","Remove","Update"});
+		option=new JComboBox<String>(new String[]{"Add","Remove","Order","View"});
 		ptitle=new JPanel(new BorderLayout());
 		tabs=new JTabbedPane();
-		connect=new AdminConnector("InvMan");
+		connect=new AdminConnector("InvMan808");
 		addrec=new AddRecipe();
 		addind=new AddIndgredients();
 		remind=new RemIndgredient();
 		remrec=new RemRecipe();
-		updind=new UpdIndgredient();
-		updrecnam=new UpdRecipeName();
-		updrec=new UpdRecipe();
+		indorder = new OrderIndgredients();
+		indview = new ViewIndgredients();
+		recview = new ViewRecipe();
+//		updind=new UpdIndgredient();
+//		updrecnam=new UpdRecipeName();
+//		updrec=new UpdRecipe();
 		ptitle.add(option,BorderLayout.LINE_END);
 		ptitle.add(title,BorderLayout.CENTER);
 		ptitle.setBorder(BorderFactory.createMatteBorder(0,0,5,0,Color.BLACK));
@@ -70,9 +76,12 @@ public class Admin {
 				}
 				else if(option.getSelectedItem().equals("Remove")) {
 					createTabbedPaneSub();
-				}
-				else {
-					createTabbedPaneUpd();
+				} else if(option.getSelectedItem().equals("Order")) {
+					createTabbedPaneOrder();
+				} else if(option.getSelectedItem().equals("View")) {
+					createTabbedPaneView();
+				} else {
+//					createTabbedPaneUpd();
 				}
 			}
 		};
@@ -99,18 +108,39 @@ public class Admin {
 		frame.add(tabs,BorderLayout.CENTER);
 		frame.revalidate();
 	}
-	public void createTabbedPaneUpd() {
+	
+	public void createTabbedPaneOrder() {
 		frame.remove(tabs);
 		tabs=new JTabbedPane();
-		recipe=updrec.getMain();
-		recipename=updrecnam.getMain();
-		indgredient=updind.getMain();
-		tabs.addTab("Update Recipe", recipe);
-		tabs.addTab("Update Indgredient", indgredient);
-		tabs.addTab("Update Recipe Name", recipename);
+		indgredient=indorder.getMain();
+		tabs.addTab("Order Indgredient", indgredient);
 		frame.add(tabs,BorderLayout.CENTER);
-		frame.revalidate();	
+		frame.revalidate();
 	}
+	
+	public void createTabbedPaneView() {
+		frame.remove(tabs);
+		tabs=new JTabbedPane();
+		recipe=recview.getMain();
+		indgredient=indview.getMain();
+		tabs.addTab("View Recipes", recipe);
+		tabs.addTab("View Indgredients", indgredient);
+		frame.add(tabs,BorderLayout.CENTER);
+		frame.revalidate();
+	}
+	
+//	public void createTabbedPaneUpd() {
+//		frame.remove(tabs);
+//		tabs=new JTabbedPane();
+//		recipe=updrec.getMain();
+//		recipename=updrecnam.getMain();
+//		indgredient=updind.getMain();
+//		tabs.addTab("Update Recipe", recipe);
+//		tabs.addTab("Update Indgredient", indgredient);
+//		tabs.addTab("Update Recipe Name", recipename);
+//		frame.add(tabs,BorderLayout.CENTER);
+//		frame.revalidate();	
+//	}
 	public static AdminConnector getConnect() {
 		return connect;
 	}

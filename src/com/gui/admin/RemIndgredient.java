@@ -35,6 +35,11 @@ public class RemIndgredient {
 				if(a==JOptionPane.YES_OPTION) {
 					try {
 						Admin.getConnect().removeIndgredient((String)indname.getSelectedItem());
+						String[] s = Admin.getConnect().getAllIndgredients();
+						indname.removeAllItems();
+						for(String str : s) {
+							indname.addItem(str);
+						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}

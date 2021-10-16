@@ -8,10 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -23,8 +23,8 @@ public class Connector {
 	File file;
 	public Connector() throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/InvMan", "Employee", "");
-		statement=connection.createStatement(ResultSet.CONCUR_READ_ONLY,ResultSet.TYPE_SCROLL_INSENSITIVE);
+		connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/InvMan", "Employee", "Inv808");
+		statement=connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		file=new File("src/com/database/Recipe.txt");
 	}
 	
@@ -42,15 +42,16 @@ public class Connector {
 		return s;
 	}
 	
-	private boolean checkDatabase(Map<String, Integer> m) throws SQLException {
-		Integer[] req=Arrays.copyOf(m.values().toArray(),m.values().toArray().length,Integer[].class);
-		Integer[] sto=getSelectedQuantity(Arrays.copyOf(m.keySet().toArray(),m.keySet().toArray().length,String[].class));
+	private ArrayList<String> checkDatabase(Map<String, Integer> m) throws SQLException {
+		ArrayList<String> unavailableList = new ArrayList<String>();
+		String[] req=Arrays.copyOf(m.keySet().toArray(),m.keySet().toArray().length,String[].class);
+		Integer[] sto=getSelectedQuantity(req);
 		for(int i=0;i<req.length||i<sto.length;i++) {
-			if(sto[i]<req[i]) {
-				return false;
+			if(sto[i]<m.get(req[i])) {
+				unavailableList.add(req[i]);
 			}
 		}
-		return true;
+		return unavailableList;
 	}
 	
 	private Map<String, Integer> getRecipeMap(String recipe) throws SQLException {
@@ -66,34 +67,29 @@ public class Connector {
 		return rec;
 	}
 	
-	public String getRecipe(String id) throws FileNotFoundException {
-		Scanner sc=new Scanner(file);
-		while (sc.hasNextLine()) {
-			String line=sc.nextLine();
-			String recipe=sc.nextLine();
-			if (id.equals(line)) {
-				sc.close();
-				return recipe;
-			}
-		}
-		sc.close();
-		return "";
+	public String getRecipe(int id) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("select rec_recipe from tbl_recipe where rec_id = ?");
+		ps.setInt(1, id);
+		ResultSet resultset = ps.executeQuery();
+		resultset.next();
+		String s=resultset.getString(1);
+		return s;
 	}
 	
-	public boolean isQuantityAdd(String id) throws FileNotFoundException, SQLException {
+	public ArrayList<String> isQuantityAdd(int id) throws FileNotFoundException, SQLException {
 		String a=getRecipe(id);
 		if(a.equalsIgnoreCase(""))
-			return false;
+			return new ArrayList<String>();
 		return checkDatabase(getRecipeMap(a));
 	}
 	
-	public String[] getRecipeIDs() throws SQLException, ClassNotFoundException {
+	public int[] getRecipeIDs() throws SQLException, ClassNotFoundException {
 		ResultSet resultset=statement.executeQuery("select rec_id from  tbl_recipe");
 		resultset.last();
-		String[] s=new String[resultset.getRow()];
+		int[] s=new int[resultset.getRow()];
 		resultset.beforeFirst();
 		for(int i=0;resultset.next();i++) {
-			s[i]=resultset.getString(1);
+			s[i]=resultset.getInt(1);
 		}
 		return s;
 	}
@@ -109,7 +105,7 @@ public class Connector {
 		return s;
 	}
 	
-	public void updateDatabase(String id,String sign) throws SQLException, FileNotFoundException {
+	public void updateDatabase(int id,String sign) throws SQLException, FileNotFoundException {
 		preparestmt=connection.prepareStatement("update tbl_quantity set quantity=quantity"+sign+"? where name=?");
 		String a=getRecipe(id);
 		if(a.equalsIgnoreCase("")) {
@@ -122,7 +118,7 @@ public class Connector {
 			String string = (String) it.next();
 			preparestmt.setInt(1, map.get(string));
 			preparestmt.setString(2, string);
+			preparestmt.executeUpdate();
 		}
 	}
-	
 }

@@ -39,7 +39,7 @@ public class AddRecipe {
 		lindgredient=new JLabel("Select indgredient");
 		lquantity=new JLabel("Enter quantity");
 		recipename=new JTextField(10);
-		String[] s=Admin.getConnect().getAllIndgredients();
+		String[] s = Admin.getConnect().getAllIndgredients();
 		indgredient=new JComboBox<String>(s);
 		NumberFormat numf=NumberFormat.getIntegerInstance();
 		NumberFormatter nf=new NumberFormatter(numf);
